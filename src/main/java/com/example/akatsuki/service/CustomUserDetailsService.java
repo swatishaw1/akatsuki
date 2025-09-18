@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user=userRepository.findUserByUsername(username);
         if (user == null){
             System.out.println("User not available");
-            throw new IllegalArgumentException("User Not found");
+            throw new IllegalArgumentException("User not Found");
         }
         return new CustomUserDetails(user);
     }
