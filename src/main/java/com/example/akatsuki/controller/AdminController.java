@@ -21,7 +21,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public Admin loginUsers(@RequestBody Admin admin) throws Exception {
+    public String loginUsers(@RequestBody Admin admin) throws Exception {
         return adminService.loginAdmin(admin);   // select * from users
     }
 

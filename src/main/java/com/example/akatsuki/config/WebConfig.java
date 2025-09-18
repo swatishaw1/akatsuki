@@ -1,11 +1,15 @@
 package com.example.akatsuki.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +20,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class WebConfig {
@@ -23,6 +29,9 @@ public class WebConfig {
 
     private final UserDetailsService adminDetailsService;
     private final UserDetailsService userDetailsService;
+    @Autowired
+    private AuthenticationConfiguration configuration;
+
 
     public WebConfig(@Qualifier("customAdminDetailsService") UserDetailsService adminDetailsService, @Qualifier("customUserDetailsService") UserDetailsService userDetailsService) {
         this.adminDetailsService = adminDetailsService;
@@ -41,6 +50,7 @@ public class WebConfig {
                         // Role-based access
                         .requestMatchers("/admins/**").hasRole("Admin") // ✅ no permitAll() here
                         .requestMatchers("/users/**").hasAnyRole("USER", "Admin") // ✅ allows both
+
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 
@@ -55,6 +65,7 @@ public class WebConfig {
         UserDetails rima= User.withUsername("rima").password("{noop}rima").roles("USER").build();
         return new InMemoryUserDetailsManager(swati,rima);
     }
+
 
 //    @Bean
 //    public AuthenticationProvider authenticationProvider(){
@@ -77,5 +88,10 @@ public class WebConfig {
 //        providerAdmin.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         providerAdmin.setPasswordEncoder(bCryptPasswordEncoder());
         return providerAdmin;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }

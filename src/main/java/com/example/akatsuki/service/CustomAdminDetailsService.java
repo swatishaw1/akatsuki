@@ -17,7 +17,7 @@ public class CustomAdminDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin admin=adminRepository.findByUsername(username);
+        Admin admin=adminRepository.findAdminByUsername(username);
         if(admin==null){
             System.out.println("Admin not available");
             throw new IllegalArgumentException("Admin Not Found");
