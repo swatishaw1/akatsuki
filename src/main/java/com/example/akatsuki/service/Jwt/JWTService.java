@@ -1,21 +1,22 @@
-package com.example.akatsuki.service;
+package com.example.akatsuki.service.Jwt;
 
 
 import com.example.akatsuki.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
 public class JWTService {
 
+//    @Value("${jwt.secret}")
     private String secretKey="";
 
     //Via this we are generating a secret key
@@ -43,6 +44,7 @@ public class JWTService {
 
     private SecretKey generateKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        System.out.println("secretKey: " + Keys.hmacShaKeyFor(keyBytes));
         return Keys.hmacShaKeyFor(keyBytes);// Decode the base64 encoded secret key and create a Key object
     }
 }

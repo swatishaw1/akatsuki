@@ -2,6 +2,7 @@ package com.example.akatsuki.service;
 
 import com.example.akatsuki.model.User;
 import com.example.akatsuki.repository.UserRepository;
+import com.example.akatsuki.service.Jwt.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
