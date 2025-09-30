@@ -80,10 +80,9 @@ public class AdminJWTService {
                 .getPayload();
     }
 
-    public boolean isTokenValid(String token, UserDetailsService userDetailsService1) {
+    public boolean isTokenValid(String token, UserDetails userDetails1) {
         final String username = extractUsername(token);
-        UserDetails userDetails = userDetailsService1.loadUserByUsername(username);
-        return (userDetails.getUsername().equals(username) && !isTokenExpired(token));
+        return (userDetails1.getUsername().equals(username) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {

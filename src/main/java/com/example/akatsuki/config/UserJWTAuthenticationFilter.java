@@ -1,6 +1,4 @@
 package com.example.akatsuki.config;
-
-
 import com.example.akatsuki.service.Jwt.AdminJWTService;
 import com.example.akatsuki.service.Jwt.JWTService;
 import jakarta.servlet.FilterChain;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,8 @@ public class UserJWTAuthenticationFilter extends OncePerRequestFilter {
     private JWTService jwtService;
     @Autowired
     private AdminJWTService adminJWTService;
-    @Qualifier("customUserDetailsService")
     @Autowired
+    @Qualifier("customUserDetailsService")
     private UserDetailsService userDetailsService;
 
     @Override
@@ -42,9 +41,9 @@ public class UserJWTAuthenticationFilter extends OncePerRequestFilter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (username!=null && authentication==null){
             //Authenticate
-            UserDetailsService userDetailsService1 = (UserDetailsService) userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(jwt,userDetailsService1)){
-                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetailsService1, null, authentication.getAuthorities());
+            UserDetails userDetails1 =  userDetailsService.loadUserByUsername(username);
+            if (jwtService.isTokenValid(jwt,userDetails1)){
+                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails1, null, userDetails1.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource()
                          .buildDetails(request)
                  );
