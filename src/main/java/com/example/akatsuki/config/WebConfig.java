@@ -62,7 +62,7 @@ public class WebConfig {
 
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .addFilterBefore((Filter) userJWTAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);//userJWTAuthenticationFilter
+                .addFilterBefore((Filter) adminJWTAuthentication, UsernamePasswordAuthenticationFilter.class);//userJWTAuthenticationFilter
         return httpSecurity.build();
     }
 
