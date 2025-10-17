@@ -62,7 +62,7 @@ public class WebConfig {
 
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .addFilterBefore((Filter) adminJWTAuthentication, UsernamePasswordAuthenticationFilter.class);//userJWTAuthenticationFilter
+                .addFilterBefore((Filter) userJWTAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);//userJWTAuthenticationFilter
         return httpSecurity.build();
     }
 
@@ -91,7 +91,7 @@ public class WebConfig {
     }
 
     @Bean
-    public AuthenticationProvider adminDetailsService(){
+    public AuthenticationProvider adminAuthenticationProvider(){
         DaoAuthenticationProvider providerAdmin = new DaoAuthenticationProvider();
         providerAdmin.setUserDetailsService(adminDetailsService);
 //        providerAdmin.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
@@ -100,16 +100,16 @@ public class WebConfig {
     }
 
     @Bean
-    @Primary
+//    @Primary
     public AuthenticationManager authenticationManager1() {
-        return new ProviderManager(adminDetailsService());
+        return new ProviderManager(adminAuthenticationProvider());
     }
 
-//    @Bean
-//    @Primary
-//    public AuthenticationManager authenticationManager2() {
-//        return new ProviderManager(authenticationProvider());
-//    }
+    @Bean
+    @Primary
+    public AuthenticationManager authenticationManager2() {
+        return new ProviderManager(authenticationProvider());
+    }
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {

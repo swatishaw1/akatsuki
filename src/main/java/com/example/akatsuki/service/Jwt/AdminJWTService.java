@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
@@ -41,22 +42,22 @@ public class AdminJWTService {
 //    }
 
     private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey1);
-        System.out.println("secretKey1: " + Keys.hmacShaKeyFor(keyBytes));
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey1);// Decode the base64 encoded secret key
         return Keys.hmacShaKeyFor(keyBytes);// Decode the base64 encoded secret key and create a Key object
     }
 
     //Generating SecretKey
     //Generating JWT Token via secretKey
     public String generateToken(Admin admin) {
-        Map<String, Objects> claims1=new HashMap<>();
+        Map<String, List> claims1=new HashMap<>();
+        claims1.put("role", Arrays.asList("Admin", "USER"));
         String strNumber1 = String.valueOf(admin.getAdminId());
         return Jwts.builder()
                 .claims().add(claims1)
-                .subject(strNumber1)
+                .subject(admin.getUsername())
                 .issuer("DCB")
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+60*10*1000))
+                .expiration(new Date(System.currentTimeMillis()+60*60*30))
                 .and()
                 .signWith(getKey())
                 .compact();

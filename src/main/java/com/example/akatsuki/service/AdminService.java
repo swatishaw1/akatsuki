@@ -1,5 +1,6 @@
 package com.example.akatsuki.service;
 
+import com.example.akatsuki.CustomAdminDetails;
 import com.example.akatsuki.model.Admin;
 import com.example.akatsuki.repository.AdminRepository;
 import com.example.akatsuki.service.Jwt.AdminJWTService;
@@ -46,9 +47,10 @@ public class AdminService {
 //        return existingAdmin; // ✅ Successful login
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(admin.getUsername(),admin.getPassword()));
         if (authenticate.isAuthenticated()){
+            
             return adminJWTService.generateToken(admin);
         }
-        throw new IllegalStateException("Admin Not Found");
+        return "Admin Not Found";
     }
 
     public List<Admin> getAllAdmins() {

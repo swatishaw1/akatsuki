@@ -50,12 +50,12 @@ public class JWTService {
     }
 
     public String generateToken(User user) {
-        Map<String, Objects> claims = new HashMap<>();
-        String strNumber = String.valueOf(user.getUserId());
+        Map<String, List> claims=new HashMap<>();
+        claims.put("role", Arrays.asList("USER"));
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(strNumber)
+                .subject(user.getUsername())
                 .issuer("DCB")
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+ 60 * 10*1000))

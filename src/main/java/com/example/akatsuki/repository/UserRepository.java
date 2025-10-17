@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.akatsuki.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByUserId(Integer userId);
-    User findUserByUsername(String username);
+    User findByUsername(String username);
 }
