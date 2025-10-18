@@ -26,19 +26,19 @@ import static io.jsonwebtoken.io.Encoders.BASE64URL;
 public class AdminJWTService {
 
     //Generating SecretKey
-    @Value("${jwt.secret}")
+//    @Value("${jwt.secret}")
     private String secretKey1="";
 
-//    public AdminJWTService(){
-//        try {
-//            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-//            SecretKey sk1 = keyGen.generateKey();
-//            secretKey1= Base64.getEncoder().encodeToString((sk1).getEncoded());
-//            System.out.println("secretKey1: " + secretKey1);
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public AdminJWTService(){
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
+            SecretKey sk1 = keyGen.generateKey();
+            secretKey1= Base64.getEncoder().encodeToString((sk1).getEncoded());
+            System.out.println("secretKey1: " + secretKey1);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey1);// Decode the base64 encoded secret key
