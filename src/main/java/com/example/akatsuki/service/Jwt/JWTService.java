@@ -49,6 +49,11 @@ public class JWTService {
         return Keys.hmacShaKeyFor(keyBytes);// Decode the base64 encoded secret key and create a Key object
     }
 
+    private SecretKey getKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);// Decode the base64 encoded secret key
+        return Keys.hmacShaKeyFor(keyBytes);// Decode the base64 encoded secret key and create a Key object
+    }
+
     public String generateToken(User user) {
         Map<String, List> claims=new HashMap<>();
         claims.put("role", Arrays.asList("USER"));
@@ -75,7 +80,7 @@ public class JWTService {
 
     private Claims extractClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(generateKey())
+                .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

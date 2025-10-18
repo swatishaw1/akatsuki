@@ -20,15 +20,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
 
+import static io.jsonwebtoken.io.Encoders.BASE64URL;
+
 @Service
 public class AdminJWTService {
 
     //Generating SecretKey
     @Value("${jwt.secret}")
-    private String secretKey1;
-    @Qualifier("customAdminDetailsService")
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private String secretKey1="";
 
 //    public AdminJWTService(){
 //        try {
@@ -53,9 +52,9 @@ public class AdminJWTService {
         claims1.put("role", Arrays.asList("Admin", "USER"));
         String strNumber1 = String.valueOf(admin.getAdminId());
         return Jwts.builder()
-                .claims().add(claims1)
+                .claims()
+                .add(claims1)
                 .subject(admin.getUsername())
-                .issuer("DCB")
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+60*60*30))
                 .and()
@@ -75,7 +74,7 @@ public class AdminJWTService {
 
     private Claims extractClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(getKey())
+                .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
